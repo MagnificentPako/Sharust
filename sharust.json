@@ -1,0 +1,17 @@
+{
+    "image_uploader": "niobium.me",
+    "provider": [
+        {
+            "name": "niobium.me",
+            "request_type": "Post",
+            "request_url": "https://i.niobium.me",
+            "file_form_name": "image",
+            "arguments": {
+                "password": "A password"
+            },
+            "response_type": "Text",
+            "regex_list": "String",
+            "url": "String"
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+name: sharust
+version: "1.0"
+author: Paul k. <paul@niobium.me>
+about: Tries to be somewhat like ShareX/Sharenix
+args:
+  - mode:
+      short: m
+      long: mode
+      takes_value: true
+      help: Define how the screenshot should be taken
+      possible_values: [full, area]
+
+subcommands:
+  - upload:
+      about: Upload a file to the provided service
+      version: "1.0"
+      args:
+        - INPUT:
+            help: Sets the input file to use
+            required: true
+            index: 1
