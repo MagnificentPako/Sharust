@@ -5,6 +5,7 @@ authors = ["Paul <paul@niobium.me>"]
 
 [dependencies]
 xdg = "2.1.0"
+sha2 = "0.5.0"
 serde = "0.9.14"
 hyper = "0.10.9"
 multipart = "0.12.0"
