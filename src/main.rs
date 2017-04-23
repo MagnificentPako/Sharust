@@ -1,3 +1,4 @@
+extern crate xdg;
 #[macro_use]
 extern crate clap;
 extern crate hyper;
@@ -43,7 +44,7 @@ struct SharustProvider {
     file_form_name: String,
     arguments: HashMap<String, String>,
     response_type: ResponseType,
-    regex_list: String,
+    regex_list: Vec<String>,
     url: String,
 }
 
@@ -56,8 +57,32 @@ struct SharustConfig {
 fn main() {
     let yaml = load_yaml!("clap.yml");
     let matches = App::from_yaml(yaml).get_matches();
+    let xdg_dirs = xdg::BaseDirectories::with_prefix("sharust").unwrap();
 
-    let mut config_file = File::open("sharust.json").unwrap();
+    let mut config_path = xdg_dirs.place_config_file("sharust.json").expect("Cannot create config directory.");
+    let mut config_file = match File::open(config_path.clone()) {
+        Ok(conf) => conf,
+        Err(_) => {
+            let mut c_file = File::create(config_path).unwrap();
+            c_file.write_all(serde_json::to_string_pretty::<SharustConfig>(&SharustConfig {
+                image_uploader: String::from("Uploader"),
+                provider: [
+                    SharustProvider {
+                        name: String::from("Uploader"),
+                        request_type: SharustMethod::Post,
+                        request_url: String::from("https://some.url"),
+                        file_form_name: String::from("file"),
+                        arguments: HashMap::new(),
+                        response_type: ResponseType::Text,
+                        regex_list: [].to_vec(),
+                        url: String::from("url")
+                    },
+                ].to_vec(),
+            }).unwrap().as_bytes());
+            println!("Created the config file. Please update it with valid data.");
+            std::process::exit(0);
+        }
+    };
     let mut config_contents = String::new();
     config_file.read_to_string(&mut config_contents).unwrap();
     let config: SharustConfig = serde_json::from_str(config_contents.as_str()).unwrap();

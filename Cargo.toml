@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Paul <paul@niobium.me>"]
 
 [dependencies]
+xdg = "2.1.0"
 serde = "0.9.14"
 hyper = "0.10.9"
 multipart = "0.12.0"
