@@ -12,12 +12,9 @@ extern crate hyper_native_tls;
 use clap::App;
 use hyper::Url;
 use std::fs::File;
-use hyper::Client;
-use serde_json::Error;
 use std::io::prelude::*;
 use std::process::Stdio;
 use std::process::Command;
-use hyper::net::Streaming;
 use hyper::method::Method;
 use hyper::client::Request;
 use notify_rust::Notification;
@@ -25,7 +22,6 @@ use std::collections::HashMap;
 use hyper::net::HttpsConnector;
 use multipart::client::Multipart;
 use hyper_native_tls::NativeTlsClient;
-use notify_rust::NotificationHint as Hint;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 enum ResponseType {
@@ -88,9 +84,9 @@ fn main() {
         let mut response = multi.send().expect("Failed to send multipart request");
 
         let mut response_text = String::new();
-        response.read_to_string(&mut response_text);
+        response.read_to_string(&mut response_text).unwrap();
 
-        std::io::stdout().write(response_text.as_bytes()).unwrap();
+        std::io::stdout().write_all(response_text.as_bytes()).unwrap();
     } else {
         // How the user _should_ interface with sharust
         let mode = matches.value_of("mode").unwrap_or("full");
@@ -104,7 +100,7 @@ fn main() {
     .args(&args)
     .output()
     .expect("Failed to execute process");
-    let out = Command::new("./target/debug/sharust")
+    let out = Command::new("sharust")
             .args(&["upload","/tmp/mynewimage.png"])
             .output()
             .expect("Failed to execute process");

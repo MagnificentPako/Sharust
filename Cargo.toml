@@ -5,7 +5,7 @@ authors = ["Paul <paul@niobium.me>"]
 
 [dependencies]
 serde = "0.9.14"
-hyper = "0.10.8"
+hyper = "0.10.9"
 multipart = "0.12.0"
 notify-rust = "3.3.0"
 serde_json = "0.9.10"
