@@ -218,7 +218,13 @@ fn open_notification(url: &str) {
                     .spawn().unwrap();
                 write!(clip_command.stdin.unwrap(), "{}", url).unwrap();
             },
-            _ => ()
+            _ => {
+                let clip_command = Command::new("xclip")
+                    .args(&["-selection","clipboard"])
+                    .stdin(Stdio::piped())
+                    .spawn().unwrap();
+                write!(clip_command.stdin.unwrap(), "{}", url).unwrap();
+            }
         }
     });
 }
